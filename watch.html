@@ -191,7 +191,7 @@
     removeBtn.onclick = () => {
       var c = confirm(' Do You Want To Remove That');
       if(c === true){
-      products = products.filter(items => items.id === product.id);
+      products = products.filter(items => items.id !== product.id);
       row.remove();
       updateTotal();
       }
@@ -209,7 +209,6 @@
     totalAmountSpan.innerText = total.toFixed(2);
   }
   total.reset();
-  
 
 </script>
 </body>
