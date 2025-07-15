@@ -1,0 +1,215 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Product Input & Selling</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+     background: linear-gradient(to right, #9c27b0,#8ecdff);    
+    margin: 0;
+    padding: 20px;
+  }
+  .nav-link{
+    flex: 1;
+    text-align: center;
+    padding: 2rem;
+}
+.nav-link ul li{
+    list-style: none;
+    display: inline-block;
+    margin: 0 20px;
+    text-transform: capitalize;
+
+}
+.nav-link ul li a{
+    color: white;
+    text-decoration: none;
+
+}
+.nav-link ul li a:hover{
+    color: rgb(241, 2, 2);
+}
+  h1 {
+    text-align: center;
+    color: #333;
+    text-transform: capitalize;
+  }
+
+  .container {
+    max-width: 600px;
+    margin: auto;
+  }
+
+  form {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  }
+
+  input[type="text"], input[type="number"] {
+    width: 95%;
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+
+  button {
+    background-color: #4CAF50;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+    text-transform: capitalize;
+  }
+
+  button:hover {
+   background: linear-gradient( blue,pink);
+  }
+
+  #productList {
+    margin-top: 30px;
+  }
+
+  #productList table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  #productList th, #productList td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    width: 50%;
+  }
+
+  #productList th {
+    background-color: #f2f2f2;
+  }
+
+  #totalSection {
+    margin-top: 20px;
+    font-size: 1.2em;
+    text-align: right;
+  }
+
+  #sellButton {
+    background-color: #008CBA;
+    margin-top: 20px;
+  }
+
+  #sellButton:hover {
+    background-color: #007bb5;
+  }
+</style>
+</head>
+<body>
+    <div class="nav-link">
+                <ul>
+                    <li><a href="index.html">home</a></li>
+                    <li><a href="phone.html">product</a></li>
+                    <li><a href="acces.html">Accessories</a></li>
+                    <li><a href="cart.html"> shopping cart</a></li>
+                </ul>
+                 
+    
+            </div>
+<h1>Product Input & Selling</h1>
+<div class="container">
+  <form id="productForm">
+    
+    <h2>Add Selected Product</h2>
+    <label for="productName">Product Name:</label>
+    <input type="text" id="productName" required />
+
+    <label for="productPrice">Price ($):</label>
+    <input type="number" id="productPrice" required min="0" step="0.01" />
+
+    <button type="submit">Add Product</button>
+  </form>
+
+  <div id="productList">
+    <h2>Product List</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Price ($)</th>
+          <th>Remove</th>
+        </tr>
+      </thead>
+      <tbody id="productTableBody">
+      </tbody>
+    </table>
+  </div>
+
+  <div id="totalSection">
+    Total: $<span id="totalAmount">0.00</span>
+  </div>
+</div>
+
+<script>
+  const productForm = document.getElementById('productForm');
+  const productTableBody = document.getElementById('productTableBody');
+  const totalAmountSpan = document.getElementById('totalAmount');
+  const sellButton = document.getElementById('sellButton');
+
+  let products = [];
+
+  productForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const name = document.getElementById('productName').value.trim();
+    const price = parseFloat(document.getElementById('productPrice').value);
+
+    if (name && !isNaN(price)) {
+      const product = { id: Date.now(), name, price };
+      products.push(product);
+      addProductToTable(product);
+      updateTotal();
+      productForm.reset();
+    }
+  });
+
+  function addProductToTable(product) {
+    const row = document.createElement('tr');
+
+    const nameCell = document.createElement('td');
+    nameCell.innerText = product.name;
+
+    const priceCell = document.createElement('td');
+    priceCell.innerText = product.price.toFixed(2);
+
+    const removeCell = document.createElement('td');
+    const removeBtn = document.createElement('button');
+    removeBtn.innerText = 'Remove';
+    removeBtn.onclick = () => {
+      var c = confirm(' Do You Want To Remove That');
+      if(c === true){
+      products = products.filter(items => items.id === product.id);
+      row.remove();
+      updateTotal();
+      }
+    };
+    removeCell.appendChild(removeBtn);
+
+    row.appendChild(nameCell);
+    row.appendChild(priceCell);
+    row.appendChild(removeCell);
+
+    productTableBody.appendChild(row);
+  }
+  function updateTotal() {
+    const total = products.reduce((sum, p) => sum + p.price, 0);
+    totalAmountSpan.innerText = total.toFixed(2);
+  }
+  
+
+</script>
+</body>
+</html>
